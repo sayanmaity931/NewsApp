@@ -20,7 +20,8 @@ class NewsViewModel : ViewModel() {
         }
     }
 
-    suspend fun getNewsViewModel() {
+    private suspend fun getNewsViewModel() {
         data.value = repo.getNewsRepo().body()
     }
+
 }

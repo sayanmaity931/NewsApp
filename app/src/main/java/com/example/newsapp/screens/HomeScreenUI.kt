@@ -1,6 +1,7 @@
 package com.example.newsapp.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,18 +14,23 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import coil.compose.SubcomposeAsyncImage
 import com.example.newsapp.R
-import org.w3c.dom.Text
+import com.example.newsapp.navigation.DetailsScreen
+
 
 @Composable
-fun HomeScreen(viewModel: NewsViewModel) {
+fun HomeScreen(navController: NavHostController) {
+
+    val viewModel = NewsViewModel()
 
     val data = viewModel.data.value?.articles?: emptyList()
 
@@ -37,7 +43,11 @@ fun HomeScreen(viewModel: NewsViewModel) {
                 CardItems(
                     title = it.title,
                     description = it.description,
-                    imageUrl = it.urlToImage
+                    imageUrl = it.urlToImage,
+                    content = it.content,
+                    author = it.author,
+                    publishedAt = it.publishedAt,
+                    navController = navController
                 )
             }
         }
@@ -48,7 +58,11 @@ fun HomeScreen(viewModel: NewsViewModel) {
 fun CardItems(
     title: String? ,
     description: String? ,
-    imageUrl: String? = ""
+    imageUrl: String? = "",
+    content : String? = "",
+    author : String? = "",
+    publishedAt : String? = "",
+    navController: NavHostController
 ){
     Card(
         modifier = Modifier
@@ -60,6 +74,12 @@ fun CardItems(
             .padding(8.dp)
             .height(100.dp)
             .padding(8.dp)
+            .clickable (
+                onClick = {
+                    navController.navigate(DetailsScreen(title = title?: "", description = description?: "", imageUrl = imageUrl?: "", content = content?: "", author = author?: "", publishedAt = publishedAt?: ""))
+                },
+                enabled = true
+            )
             ,
             verticalAlignment = Alignment.CenterVertically
 
